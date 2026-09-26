@@ -8,14 +8,14 @@ spec:
   source:
     repoURL: oci://code.forgejo.org/forgejo-helm
     chart: forgejo
-    targetRevision: "9.0.0"
+    targetRevision: "17.1.7"
     helm:
       valueFiles:
         - $values/kubernetes/manifests/forgejo/values.yaml
   sources:
     - repoURL: oci://code.forgejo.org/forgejo-helm
       chart: forgejo
-      targetRevision: "9.0.0"
+      targetRevision: "17.1.7"
       helm:
         valueFiles:
           - $values/kubernetes/manifests/forgejo/values.yaml
