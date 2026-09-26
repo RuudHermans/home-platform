@@ -1,0 +1,23 @@
+---
+- name: Basisconfiguratie van de k3s-server
+  hosts: k3s_servers
+  become: true
+
+  tasks:
+    - name: Zorg dat het systeem up-to-date is
+      apt:
+        update_cache: true
+        upgrade: dist
+
+    - name: Installeer basisgereedschap
+      apt:
+        name:
+          - curl
+          - vim
+          - htop
+          - net-tools
+        state: present
+
+    - name: Zet de tijdzone op Europe/Amsterdam
+      community.general.timezone:
+        name: Europe/Amsterdam

@@ -1,0 +1,48 @@
+---
+- name: Voorwaarden - swap uitschakelen (Kubernetes vereist dit)
+  ansible.builtin.shell: swapoff -a
+  changed_when: false
+
+- name: Voorwaarden - swap ook permanent uitschakelen na herstart
+  ansible.builtin.replace:
+    path: /etc/fstab
+    regexp: '^([^#].*\sswap\s.*)$'
+    replace: '# \1'
+
+- name: Registry-mirrorconfiguratie plaatsen
+  ansible.builtin.template:
+    src: registries.yaml.j2
+    dest: /etc/rancher/k3s/registries.yaml
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  when: k3s_registry_mirrors_enabled
+  notify: Herstart k3s
+
+- name: Controleren of k3s al geinstalleerd is
+  ansible.builtin.stat:
+    path: /usr/local/bin/k3s
+  register: k3s_binary
+
+- name: k3s installeren met embedded etcd, ServiceLB uitgeschakeld
+  ansible.builtin.shell: |
+    curl -sfL https://get.k3s.io | \
+    INSTALL_K3S_VERSION="{{ k3s_version }}" \
+    INSTALL_K3S_EXEC="server --cluster-init --disable {{ k3s_disable_components | join(',') }} --write-kubeconfig-mode 644" \
+    sh -
+  become: true
+  when: not k3s_binary.stat.exists
+
+- name: Wacht tot de k3s-service actief is
+  ansible.builtin.systemd:
+    name: k3s
+    state: started
+    enabled: true
+  become: true
+
+- name: Wacht tot de Kubernetes API bereikbaar is
+  ansible.builtin.wait_for:
+    port: 6443
+    host: 127.0.0.1
+    timeout: 120
