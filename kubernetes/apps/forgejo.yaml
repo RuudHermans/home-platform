@@ -19,7 +19,7 @@ spec:
       helm:
         valueFiles:
           - $values/kubernetes/manifests/forgejo/values.yaml
-    - repoURL: https://github.com/RuudHermans/home-platform.git
+    - repoURL: https://git.argotal.com/RuudHermans/home-platform.git
       targetRevision: main
       ref: values
   destination:

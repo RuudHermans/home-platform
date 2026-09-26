@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/RuudHermans/home-platform.git
+    repoURL: https://git.argotal.com/RuudHermans/home-platform.git
     targetRevision: main
     path: kubernetes/apps
     directory:
