@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/<jouw-gebruikersnaam>/thuisopstelling-platform.git
+    repoURL: https://github.com/RuudHermans/home-platform.git
     targetRevision: main
     path: kubernetes/manifests/test-app-2
   destination:
