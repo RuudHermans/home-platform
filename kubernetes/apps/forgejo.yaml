@@ -6,14 +6,14 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: oci://code.forgejo.org/forgejo-helm
+    repoURL: code.forgejo.org/forgejo-helm
     chart: forgejo
     targetRevision: "17.1.7"
     helm:
       valueFiles:
         - $values/kubernetes/manifests/forgejo/values.yaml
   sources:
-    - repoURL: oci://code.forgejo.org/forgejo-helm
+    - repoURL: code.forgejo.org/forgejo-helm
       chart: forgejo
       targetRevision: "17.1.7"
       helm:
