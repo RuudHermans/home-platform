@@ -54,6 +54,13 @@ RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/s
 # Helm
 RUN curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
+# Gelijk houden aan de app-versie van de sealed-secrets-chart (zie stap 1)
+ARG KUBESEAL_VERSION=0.40.0
+RUN curl -OL "https://github.com/bitnami/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-linux-amd64.tar.gz" \
+    && tar -xvzf kubeseal-${KUBESEAL_VERSION}-linux-amd64.tar.gz kubeseal \
+    && install -m 755 kubeseal /usr/local/bin/kubeseal \
+    && rm kubeseal kubeseal-${KUBESEAL_VERSION}-linux-amd64.tar.gz
+
 # Toevoegen aan .devcontainer/Dockerfile, na de bestaande installatiestappen
 RUN apt-get update && apt-get install -y --no-install-recommends apache2-utils \
     && rm -rf /var/lib/apt/lists/*
