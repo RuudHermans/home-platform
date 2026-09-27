@@ -13,10 +13,12 @@ gitea:  # de Forgejo Helm-chart hergebruikt (bewust) veel Gitea-conventies uit h
       DOMAIN: git.argotal.com
       ROOT_URL: https://git.argotal.com/
       SSH_DOMAIN: git.argotal.com
+    actions:
+      enabled: true
 
 service:
   http:
-    type: ClusterIP
+    type: ClusterIP 
   ssh:
     type: LoadBalancer   # krijgt een eigen IP van MetalLB, uitsluitend voor git-over-SSH
 
