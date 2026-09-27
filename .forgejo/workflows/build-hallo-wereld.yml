@@ -31,9 +31,9 @@ jobs:
             --severity HIGH,CRITICAL \
             --exit-code 1 \
             --ignore-unfixed \
-            hallo-wereld:${{ gitea.sha }}
+            hallo-wereld:${{ github.sha }}
 
       - name: Image pushen naar Zot
         run: |
-          docker tag hallo-wereld:${{ gitea.sha }} registry.argotal.com/hallo-wereld:${{ gitea.sha }}
-          docker push registry.argotal.com/hallo-wereld:${{ gitea.sha }}
+          docker tag hallo-wereld:${{ github.sha }} registry.argotal.com/hallo-wereld:${{ github.sha }}
+          docker push registry.argotal.com/hallo-wereld:${{ github.sha }}
