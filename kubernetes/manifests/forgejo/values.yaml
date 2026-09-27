@@ -15,6 +15,8 @@ gitea:  # de Forgejo Helm-chart hergebruikt (bewust) veel Gitea-conventies uit h
       SSH_DOMAIN: git.argotal.com
     actions:
       enabled: true
+    packages:
+      enabled: true
 
 service:
   http:
