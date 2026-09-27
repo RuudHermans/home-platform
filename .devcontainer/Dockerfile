@@ -1,5 +1,6 @@
 FROM ubuntu:22.04
 
+# Test for ForgeJo
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Basisgereedschap
