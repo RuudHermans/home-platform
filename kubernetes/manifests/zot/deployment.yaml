@@ -18,7 +18,7 @@ metadata:
 data:
   config.json: |
     {
-      "storage": {"rootDirectory": "/var/lib/registry"},
+      "storage": {"rootDirectory": "/var/lib/registry", "dedupe": false},
       "http": {"address": "0.0.0.0", "port": "5000",
         "auth": {"htpasswd": {"path": "/etc/zot/htpasswd"}}},
       "log": {"level": "info"}
