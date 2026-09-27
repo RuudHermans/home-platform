@@ -15,15 +15,8 @@ spec:
         - name: runner
           image: data.forgejo.org/forgejo/runner:13
           command: ["forgejo-runner", "daemon", "--config", "/data/config.yaml"]
-          env:
-            - name: DOCKER_HOST
-              value: tcp://localhost:2376
-            - name: DOCKER_CERT_PATH
-              value: /certs/client
-            - name: DOCKER_TLS_VERIFY
-              value: "1"
           volumeMounts:
-            - {name: certs, mountPath: /certs}
+            - {name: docker-sock, mountPath: /var/run}
             - {name: runner-config, mountPath: /data/config.yaml, subPath: config.yaml}
           resources:
             requests: {cpu: 200m, memory: 256Mi}
@@ -33,12 +26,12 @@ spec:
             privileged: true   # noodzakelijk voor Docker-in-Docker; blijft beperkt tot deze ene pod
           env:
             - name: DOCKER_TLS_CERTDIR
-              value: /certs
+              value: ""   # TLS uitgeschakeld: runner en dind delen toch al dezelfde pod, dus dezelfde vertrouwensgrens
           volumeMounts:
-            - {name: certs, mountPath: /certs}
+            - {name: docker-sock, mountPath: /var/run}
           resources:
             requests: {cpu: 500m, memory: 512Mi}
             limits: {memory: 2Gi}
       volumes:
-        - {name: certs, emptyDir: {}}
+        - {name: docker-sock, emptyDir: {}}
         - {name: runner-config, secret: {secretName: forgejo-runner-config}}
