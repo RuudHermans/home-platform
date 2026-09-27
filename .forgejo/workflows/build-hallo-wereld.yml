@@ -31,7 +31,7 @@ jobs:
             --severity HIGH,CRITICAL \
             --exit-code 1 \
             --ignore-unfixed \
-            hallo-wereld:${{ github.sha }}
+            registry.mijndomein.nl/hallo-wereld:${{ github.sha }}
 
       - name: Image pushen naar Zot
         run: |
