@@ -54,4 +54,8 @@ RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/s
 # Helm
 RUN curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
+# Toevoegen aan .devcontainer/Dockerfile, na de bestaande installatiestappen
+RUN apt-get update && apt-get install -y --no-install-recommends apache2-utils \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /workspace
