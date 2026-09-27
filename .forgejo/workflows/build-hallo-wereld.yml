@@ -18,8 +18,8 @@ jobs:
 
       - name: Image bouwen en taggen met de commit-SHA
         run: |
-          docker build -t registry.mijndomein.nl/hallo-wereld:${{ github.sha }} apps/hallo-wereld/
-          docker tag registry.mijndomein.nl/hallo-wereld:${{ github.sha }} registry.mijndomein.nl/hallo-wereld:latest
+          docker build -t registry.argotal.com/hallo-wereld:${{ github.sha }} apps/hallo-wereld/
+          docker tag registry.argotal.com/hallo-wereld:${{ github.sha }} registry.argotal.com/hallo-wereld:latest
 
       - name: Image pushen
         run: |
