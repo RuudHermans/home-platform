@@ -3,4 +3,4 @@ k3s_version: "v1.31.4+k3s1"   # controleer op github.com/k3s-io/k3s/releases voo
 k3s_disable_components:
   - servicelb
   # traefik blijft bewust aan: dit is je ingress-controller (zie document 5a)
-k3s_registry_mirrors_enabled: false   # zet dit later op true, in document 7b, zodra Zot bestaat
+k3s_registry_mirrors_enabled: true

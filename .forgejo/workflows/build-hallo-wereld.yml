@@ -1,0 +1,24 @@
+on:
+  push:
+    branches: [main]
+    paths: ["apps/hallo-wereld/**"]
+
+jobs:
+  build-and-push:
+    runs-on: docker
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Inloggen bij Zot
+        run: |
+          echo "${{ secrets.ZOT_PASSWORD }}" | docker login registry.mijndomein.nl -u ruud --password-stdin
+
+      - name: Image bouwen en taggen met de commit-SHA
+        run: |
+          docker build -t registry.mijndomein.nl/hallo-wereld:${{ github.sha }} apps/hallo-wereld/
+          docker tag registry.mijndomein.nl/hallo-wereld:${{ github.sha }} registry.mijndomein.nl/hallo-wereld:latest
+
+      - name: Image pushen
+        run: |
+          docker push registry.mijndomein.nl/hallo-wereld:${{ github.sha }}
+          docker push registry.mijndomein.nl/hallo-wereld:latest
