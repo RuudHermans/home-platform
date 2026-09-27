@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: forgejo-runner
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://git.argotal.com/RuudHermans/home-platform.git
+    targetRevision: main
+    path: kubernetes/manifests/forgejo-runner
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: forgejo
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true   # onschuldig/idempotent: de forgejo-namespace bestaat al sinds document 7a

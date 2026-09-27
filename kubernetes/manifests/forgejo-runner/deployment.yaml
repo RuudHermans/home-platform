@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forgejo-runner
+  namespace: forgejo
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: forgejo-runner}
+  template:
+    metadata:
+      labels: {app: forgejo-runner}
+    spec:
+      containers:
+        - name: runner
+          image: code.forgejo.org/forgejo/runner:6.3.1
+          command: ["sh", "-c"]
+          args:
+            - |
+              forgejo-runner register --no-interactive \
+                --instance http://forgejo-http.forgejo.svc.cluster.local:3000 \
+                --token "$RUNNER_TOKEN" --name k3s-runner --labels docker:docker://node:20-bookworm,ubuntu-latest:docker://node:20-bookworm && \
+              forgejo-runner daemon
+          env:
+            - name: RUNNER_TOKEN
+              valueFrom: {secretKeyRef: {name: runner-registration-token, key: token}}
+            - name: DOCKER_HOST
+              value: tcp://localhost:2376
+            - name: DOCKER_CERT_PATH
+              value: /certs/client
+            - name: DOCKER_TLS_VERIFY
+              value: "1"
+          volumeMounts:
+            - {name: certs, mountPath: /certs}
+          resources:
+            requests: {cpu: 200m, memory: 256Mi}
+        - name: dind
+          image: docker:24-dind
+          securityContext:
+            privileged: true   # noodzakelijk voor Docker-in-Docker; blijft beperkt tot deze ene pod
+          env:
+            - name: DOCKER_TLS_CERTDIR
+              value: /certs
+          volumeMounts:
+            - {name: certs, mountPath: /certs}
+          resources:
+            requests: {cpu: 500m, memory: 512Mi}
+            limits: {memory: 2Gi}
+      volumes:
+        - {name: certs, emptyDir: {}}
