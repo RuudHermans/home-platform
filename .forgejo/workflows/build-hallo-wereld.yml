@@ -21,7 +21,19 @@ jobs:
           docker build -t registry.argotal.com/hallo-wereld:${{ github.sha }} apps/hallo-wereld/
           docker tag registry.argotal.com/hallo-wereld:${{ github.sha }} registry.argotal.com/hallo-wereld:latest
 
-      - name: Image pushen
+      # Toe te voegen in het bestaande workflow-bestand, na de 'docker build'-stap
+      - name: Image scannen op kwetsbaarheden (Trivy)
         run: |
-          docker push registry.argotal.com/hallo-wereld:${{ github.sha }}
-          docker push registry.argotal.com/hallo-wereld:latest
+          docker run --rm \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v trivy-cache:/root/.cache/ \
+            aquasec/trivy:0.74.0 image \
+            --severity HIGH,CRITICAL \
+            --exit-code 1 \
+            --ignore-unfixed \
+            hallo-wereld:${{ gitea.sha }}
+
+      - name: Image pushen naar Zot
+        run: |
+          docker tag hallo-wereld:${{ gitea.sha }} registry.argotal.com/hallo-wereld:${{ gitea.sha }}
+          docker push registry.argotal.com/hallo-wereld:${{ gitea.sha }}

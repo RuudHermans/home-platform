@@ -58,4 +58,8 @@ RUN curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm
 RUN apt-get update && apt-get install -y --no-install-recommends apache2-utils \
     && rm -rf /var/lib/apt/lists/*
 
+# Toevoegen aan .devcontainer/Dockerfile, na de bestaande installatiestappen (Trivy)
+RUN curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | \
+    sh -s -- -b /usr/local/bin v0.74.0
+
 WORKDIR /workspace
