@@ -9,6 +9,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Docker-CLI installeren
+        run: apt-get update && apt-get install -y --no-install-recommends docker.io
+
       - name: Inloggen bij Zot
         run: |
           echo "${{ secrets.ZOT_PASSWORD }}" | docker login registry.mijndomein.nl -u ruud --password-stdin
