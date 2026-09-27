@@ -13,17 +13,9 @@ spec:
     spec:
       containers:
         - name: runner
-          image: code.forgejo.org/forgejo/runner:6.3.1
-          command: ["sh", "-c"]
-          args:
-            - |
-              forgejo-runner register --no-interactive \
-                --instance http://forgejo-http.forgejo.svc.cluster.local:3000 \
-                --token "$RUNNER_TOKEN" --name k3s-runner --labels docker:docker://node:20-bookworm,ubuntu-latest:docker://node:20-bookworm && \
-              forgejo-runner daemon
+          image: data.forgejo.org/forgejo/runner:13
+          command: ["forgejo-runner", "daemon", "--config", "/data/config.yaml"]
           env:
-            - name: RUNNER_TOKEN
-              valueFrom: {secretKeyRef: {name: runner-registration-token, key: token}}
             - name: DOCKER_HOST
               value: tcp://localhost:2376
             - name: DOCKER_CERT_PATH
@@ -32,6 +24,7 @@ spec:
               value: "1"
           volumeMounts:
             - {name: certs, mountPath: /certs}
+            - {name: runner-config, mountPath: /data/config.yaml, subPath: config.yaml}
           resources:
             requests: {cpu: 200m, memory: 256Mi}
         - name: dind
@@ -48,3 +41,4 @@ spec:
             limits: {memory: 2Gi}
       volumes:
         - {name: certs, emptyDir: {}}
+        - {name: runner-config, secret: {secretName: forgejo-runner-config}}
