@@ -5,3 +5,5 @@
 *.pem
 *.key
 .env
+sealed-secrets-master-key-backup.yaml
+sealed-secrets-public-cert.pem
