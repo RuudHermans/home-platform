@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root
+  namespace: platform-argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/RuudHermans/home-platform.git
+    targetRevision: main
+    path: kubernetes/apps
+    directory:
+      recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: platform-argocd
+  syncPolicy:
+    automated:
+      prune: true       # verwijder objecten uit het cluster als ze uit Git verdwijnen
+      selfHeal: true     # corrigeer drift automatisch
+    syncOptions:
+      - CreateNamespace=true

@@ -1,6 +1,6 @@
 configs:
   params:
-    server.insecure: true
+    server.insecure: true   # nodig omdat TLS straks bij Cloudflare eindigt, niet bij Argo CD zelf — zie de toelichting bij stap 4
 
 redis-ha:
   enabled: false
